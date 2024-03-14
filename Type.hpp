@@ -55,6 +55,7 @@ struct Vector2D {
 };
 
 enum EntityType {
+    UNDEFINED = -1,
     WALL = 0,
     PLAYER = 1,
     ENEMY = 2,
