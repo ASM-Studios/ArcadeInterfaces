@@ -21,3 +21,8 @@ class IGameModule {
         virtual std::vector<std::reference_wrapper<IEntity>> initEntities(Map &map) = 0;
         virtual std::map<EntityType, std::string> getSpriteDict() = 0;
 };
+
+extern "C" {
+    IGameModule *entryPoint();
+    Signature getSignature();
+}

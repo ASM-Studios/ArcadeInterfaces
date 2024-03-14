@@ -20,3 +20,8 @@ class IDisplayModule {
         virtual void staticScreen(std::size_t id) = 0;
         virtual void loadSpriteDict(const std::map<EntityType, std::string>& spriteDict) = 0;
 };
+
+extern "C" {
+    IDisplayModule *entryPoint();
+    Signature getSignature();
+}
