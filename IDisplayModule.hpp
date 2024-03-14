@@ -10,7 +10,6 @@ class IDisplayModule {
         virtual void clear() = 0;
 
         virtual std::vector<Input> event() = 0;
-        virtual SelectedLib menu(Menu &menu) = 0;
 
         //update must be followed by a display()
         virtual void updateText(const std::string& text, Vector2D pos, bool highlight) = 0;
