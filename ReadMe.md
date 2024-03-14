@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-c
-=======
 # Interfaces pour le projet Arcade
 
 ## Comment l'utiliser sur votre propre repository ?
@@ -132,4 +129,3 @@ git push
 ```
 
 
->>>>>>> Stashed changes
