@@ -4,7 +4,7 @@
 
 class IDisplayModule {
     public:
-        ~IDisplayModule() = default;
+        virtual ~IDisplayModule() = default;
 
         virtual void display() = 0;
         virtual void clear() = 0;
