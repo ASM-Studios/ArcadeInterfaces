@@ -139,11 +139,31 @@ Une fois que vous avez effectué votre commit dans ArcadeInterfaces, revenez à 
 
 ## 2 - Interface de pour librairie graphique
 
+```mermaid
+  graph TD;
+    A[loaging a graphical lib] --> B[loadSpriteDict]
+    B --> C[core main loop];
+    C --> D[clear];
+    D --> E[event];
+    E --> F[handling game functionnement];
+    F --> G[updateMap];
+    G --> H[updateEntity];
+    H --> I[updateText];
+    C --> J[staticScreen];
+    I --> K[display];
+    J --> K;
+    K --> C;
+
+```
+
 ## 3 - Interface de pour librairie de jeu
 
 ## 4 - Théorie complémentaire vis-à-vis du fonctionnement
 
 ## 5 - Kiwi is love, kiwi is life
+
+Merci d'avoir lue cette documentation jusqu'au bout. Kiwi est fier de vous.
+
 <center>
     <img src="kiwi-dance.gif"/>
 </center>
