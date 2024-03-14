@@ -13,7 +13,7 @@ class IGameModule {
         virtual void update(std::size_t deltaTime, const std::vector<std::reference_wrapper<IEntity>>& entities) = 0;
 
         //return an instruction sent from the game to the core, see the documentation for more details
-        virtual std::string getInstruction() = 0;
+        virtual std::vector<std::string> getInstruction() = 0;
 
         //init function to call on game start
         virtual std::vector<std::reference_wrapper<IEntity>> initEntities(Map &map) = 0;
