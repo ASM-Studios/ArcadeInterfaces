@@ -103,5 +103,5 @@ enum GameState {
     RUNNING,
     WIN,
     GAMEOVER,
-    SLAPSH
+    SPLASH
 };
