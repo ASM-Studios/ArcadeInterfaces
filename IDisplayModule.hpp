@@ -13,7 +13,7 @@ class IDisplayModule {
         virtual SelectedLib menu(Menu &menu) = 0;
 
         //update must be followed by a display()
-        virtual void updateText(const std::string& text, Vector2D pos) = 0;
+        virtual void updateText(const std::string& text, Vector2D pos, bool highlight) = 0;
         virtual void updateEntity(IEntity &entity) = 0;
         virtual void updateMap(Map &map) = 0;
 
