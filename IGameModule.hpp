@@ -4,6 +4,8 @@
 
 class IGameModule {
     public:
+        virtual ~IGameModule() = default;
+
         virtual std::size_t getScore() = 0;
         virtual GameState getState() = 0;
         virtual std::size_t getLive() = 0;
