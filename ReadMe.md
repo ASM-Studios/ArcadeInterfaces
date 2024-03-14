@@ -128,4 +128,4 @@ git commit -m "description du commit"
 git push
 ```
 
-
+Une fois que vous avez effectué votre commit dans ArcadeInterfaces, revenez à la racine de votre repository est faites un commit pour sauvegarder ces modification sur votre projet aussi.
