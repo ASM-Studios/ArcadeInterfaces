@@ -65,9 +65,7 @@ enum EntityType {
     ITEM4 = 6,
 };
 
-struct Map {
-    std::vector<std::vector<EntityType>> grid;
-};
+using Map = std::vector<std::vector<EntityType>>;
 
 enum Input {
     UP,
