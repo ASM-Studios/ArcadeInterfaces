@@ -1,6 +1,13 @@
 # Interfaces pour le projet Arcade
 
-## Comment l'utiliser sur votre propre repository ?
+**Table des matières**
+- 1 - Comment l'utiliser sur votre propre repository ?
+- 2 - Interface de pour librairie graphique
+- 3 - Interface de pour librairie de jeu
+- 4 - Théorie complémentaire vis-à-vis du fonctionnement
+- 5 - Kiwi is love, kiwi is life
+
+## 1 - Comment l'utiliser sur votre propre repository ?
 
 Vous pouvez importer ce repository en tant que sous-module de votre propre repository. Pour cela, suivez le court tutoriel qui suit.
 
@@ -129,3 +136,14 @@ git push
 ```
 
 Une fois que vous avez effectué votre commit dans ArcadeInterfaces, revenez à la racine de votre repository est faites un commit pour sauvegarder ces modification sur votre projet aussi.
+
+## 2 - Interface de pour librairie graphique
+
+## 3 - Interface de pour librairie de jeu
+
+## 4 - Théorie complémentaire vis-à-vis du fonctionnement
+
+## 5 - Kiwi is love, kiwi is life
+<center>
+    <img src="kiwi-dance.gif"/>
+</center>
