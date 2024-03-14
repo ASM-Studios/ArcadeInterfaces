@@ -1,4 +1,4 @@
-#pragma once
+/*-----Types-----*/
 
 #include <string>
 #include <vector>
@@ -75,19 +75,20 @@ class IEntity {
         bool visibility;
 
     public:
-        virtual ~IEntity() = 0;
         virtual EntityType getEntityType() = 0;
         virtual void setEntityType(EntityType) = 0;
+
         virtual Vector2D getPosition() = 0;
         virtual void setPosition(Vector2D position) = 0;
+
         virtual bool getVisibility() = 0;
         virtual void setVisibility(bool visibility) = 0;
 };
 
+/*-----Display-----*/
+
 class IDisplayModule {
     public:
-        ~IDisplayModule() = default;
-
         virtual void display() = 0;
         virtual void clear() = 0;
 
@@ -105,16 +106,25 @@ class IDisplayModule {
         virtual void loadSpriteDict(const std::map<EntityType, std::string>& spriteDict) = 0;
 };
 
+extern "C" {
+    IDisplayModule *entryPoint();
+    Signature getSignature();
+}
+
+/*-----Game-----*/
+
 class IGameModule {
     public:
-        ~IGameModule() = default;
-
         virtual std::size_t getScore() = 0;
         virtual GameState getState() = 0;
         virtual std::size_t getLive() = 0;
+
+        //delta since the start of the game
         virtual void handleInput(std::size_t deltaTime, Input input, const std::vector<std::reference_wrapper<IEntity>>& entities) = 0;
-        virtual void update(std::size_t deltaTime, const std::vector<std::reference_wrapper<IEntity>>& entities) = 0; //delta since the start of the game
+        virtual void update(std::size_t deltaTime, const std::vector<std::reference_wrapper<IEntity>>& entities) = 0;
+
         virtual std::vector<std::pair<std::string, Vector2D>> getTexts() = 0;
+
         virtual std::vector<std::reference_wrapper<IEntity>> initEntities(Map &map) = 0;
         virtual std::map<EntityType, std::string> getSpriteDict() = 0;
 };
