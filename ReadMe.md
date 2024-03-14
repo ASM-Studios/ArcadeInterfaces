@@ -137,7 +137,164 @@ git push
 
 Une fois que vous avez effectué votre commit dans ArcadeInterfaces, revenez à la racine de votre repository est faites un commit pour sauvegarder ces modification sur votre projet aussi.
 
-## 2 - Interface de pour librairie graphique
+## 2 - Interface pour librairie graphique
+
+Cette section explique le fonctionnement commun prévu pour les librairies graphiques ainsi que leur interface.
+
+### Fonctions externalisées
+
+L'architecture prévoie deux fonctions à externaliser pour être utiliser dans le "core".
+
+```cpp
+IDisplayModule *entryPoint();
+Signature getSignature();
+```
+
+- La fonction `entryPoint` renvoie une instance de la classe dérivée de `IDisplayModule`.
+- La fonction `getSignature` renvoie une `Signature` qui permet d'identifier la lib comme conforme à une librairie graphique du projet.
+
+Une `Signature` est définie de la manière suivante :
+
+```cpp
+enum Signature {
+    GAME = 404,
+    GRAPHICAL = 808
+};
+```
+
+La fonction `getSignature` d'une librairie graphique est sensée retourner `GRAPHICAL`.
+
+### Description de l'interface
+
+Le boulot de la librairie graphique c'est d'afficher le jeu à l'écran.
+
+#### Préparer la librairie pour l'affichage
+
+Pour initier une librairie il faut d'abord lui transmettre la liste des sprites à afficher. Pour cela il faut utiliser la méthode suivante :
+
+```cpp
+loadSpriteDict(const std::map<EntityType, std::string>& spriteDict) = 0;
+```
+
+La fonction prend en argument une `std::map` d'`EntityType` et de `std::string`. L'`EntityType` est définie dans `Type.hhp`.
+
+```cpp
+enum EntityType {
+    UNDEFINED = -1,
+    WALL = 0,
+    PLAYER = 1,
+    ENEMY = 2,
+    ITEM1 = 3,
+    ITEM2 = 4,
+    ITEM3 = 5,
+    ITEM4 = 6
+};
+```
+
+Ainsi il y a une entrée dans la `std::map` pour chaque valeur de `EntityType`. La `std::string` correspond au chemin vers le sprite correspondant au `EntityType`.
+
+#### Transmettre l'information à afficher
+
+L'interface dispose de trois méthodes pour transmettre les informations à afficher.
+
+```cpp
+virtual void updateEntity(IEntity &entity) = 0;
+virtual void updateMap(Map &map) = 0;
+virtual void updateText(const std::string& text, Vector2D pos, bool highlight) = 0;
+```
+
+- La méthode `updateEntity` permet d'afficher sprite sous la forme d'une `IEntity`. `IEntity` est une classe définie dans `Type.hpp` qui contient le type et la position d'un sprite à afficher.
+
+```cpp
+class IEntity {
+    private:
+        EntityType entityType;
+        Vector2D position;
+        bool visibility;
+
+    public:
+        virtual ~IEntity() = 0;
+        virtual EntityType getEntityType() = 0;
+        virtual void setEntityType(EntityType) = 0;
+        virtual Vector2D getPosition() = 0;
+        virtual void setPosition(Vector2D position) = 0;
+        virtual bool getVisibility() = 0;
+        virtual void setVisibility(bool visibility) = 0;
+};
+```
+
+Les noms des variables sont équivoques. Précision tout de même que `Vector2D` représente une position dans un espace à deux dimension définie de la manière suivante :
+
+```cpp
+struct Vector2D {
+    int x;
+    int y;
+};
+```
+
+En sachant que les opérateurs "+", "+=", "-" et "-=" sont surchargés pour `Vector2D`.
+
+- La méthode `updateMap` permet d'afficher un tableau d'entité. Elle prend en argument une `Map`. Une `Map` est un alias défini dans `Type.hpp`.
+
+```cpp
+using Map = std::vector<std::vector<EntityType>>;
+```
+
+- La méthode `updateText` permet d'afficher une `std::string`. La méthode prend en argument le texte au format `std::string`, la position en `Vector2D` et un `bool`. Ce `bool` indique si le texte doit être surligné ou non. Si le texte doit être surligné, la couleur du texte et la couleur de son fond sont échangées.
+
+L'interface possède aussi une méthode `staticScreen` pour afficher un écran fixe au besoin.
+
+```cpp
+virtual void staticScreen(StaticScreen screen) = 0;
+```
+
+La méthode prend en argument un `StaticScreen` qui est une `enum` qui permet de choisir le type d'écran à afficher. `StaticScreen` est défini dans `Type.hpp`.
+
+```cpp
+enum StaticScreen {
+    SCREEN_SPLASH,
+    SCREEN_GAMEOVER
+};
+```
+
+#### Fonctions d'affichage classique
+
+L'interface confère deux fonctions pour gérer le rafraîchissement de l'affichage.
+
+```cpp
+virtual void display() = 0;
+virtual void clear() = 0;
+```
+
+- La méthode `display` permet d'afficher à l'écran toutes les informations préalablement données.
+
+- La méthode `clear` permet d'effacer l'écran en cours.
+
+#### Gestion des évènements
+
+La librairie graphique est aussi chargée de gérer les évènements de l'utilisateurs. Pour cela, il faut utiliser la méthode `event`.
+
+```cpp
+virtual std::vector<Input> event() = 0;
+```
+
+La méthode renvoie un `std::vector` d'évènements sous la forme d'`Input`. Un `Input` est une `enum` qui indique le type d'évènement reçu.
+
+```cpp
+enum Input {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    QUIT,
+    MENU,
+    ACTION
+};
+```
+
+### Usage prévu de l'interface de librairie graphique
+
+Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librairie graphique dans le "core".
 
 ```mermaid
   graph TD;
@@ -156,7 +313,7 @@ Une fois que vous avez effectué votre commit dans ArcadeInterfaces, revenez à 
 
 ```
 
-## 3 - Interface de pour librairie de jeu
+## 3 - Interface pour librairie de jeu
 
 ## 4 - Théorie complémentaire vis-à-vis du fonctionnement
 
