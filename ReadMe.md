@@ -7,7 +7,7 @@
     - [Comment corriger l'adresse de mon sous-module ?](#comment-corriger-ladresse-de-mon-sous-module-)
     - [Importer les fichiers du sous-module](#importer-les-fichiers-du-sous-module)
   - [Mettez à jour régulièrement le sous-module](#mettez-à-jour-régulièrement-le-sous-module)
-  - [Modifier le sous-module que vous avez importer dans votre repository](#modifier-le-sous-module-que-vous-avez-importer-dans-votre-repository)
+  - [Modifier le sous-module que vous avez importé dans votre repository](#modifier-le-sous-module-que-vous-avez-importé-dans-votre-repository)
 - 2 - [Interface de pour librairie graphique](#2---interface-pour-librairie-graphique)
 - 3 - [Interface de pour librairie de jeu](#3---interface-de-pour-librairie-de-jeu)
 - 4 - [Théorie complémentaire vis-à-vis du fonctionnement](#4---théorie-complémentaire-vis-à-vis-du-fonctionnement)
@@ -127,7 +127,7 @@ Si vous n'avez pas réussi à effectuer l'une des commandes précédentes :
 - vérifiez qu'il n'y a pas un conflit sur la branche sur laquelle vous travaillez
 - vérifiez si la configuration de l'adresse du module est conforme
 
-### Modifier le sous-module que vous avez importer dans votre repository
+### Modifier le sous-module que vous avez importé dans votre repository
 
 > Avant tout, vérifier avec le propriétaire du repository du module ArcadeInterfaces que vous avez le droit d'éditer le projet.
 
@@ -223,7 +223,7 @@ class IEntity {
 };
 ```
 
-Les noms des variables sont équivoques. Précision tout de même que `Vector2D` représente une position dans un espace à deux dimension définie de la manière suivante :
+Les noms des variables sont équivoques. Précisons tout de même que `Vector2D` représente une position dans un espace à deux dimension définie de la manière suivante :
 
 ```cpp
 struct Vector2D {
@@ -300,8 +300,8 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
   graph TD;
     A[loaging a graphical lib] --> B[loadDicts]
     B --> C[core main loop];
-    C --> D[clear];
-    D --> E[event];
+    C --> D[event];
+    D --> E[clear];
     E --> F[handling game functionnement];
     F --> G[updateMap];
     G --> H[updateEntity];
@@ -315,27 +315,198 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
 
 ## 3 - Interface pour librairie de jeu
 
+Cette section explique le fonctionnement commun prévu pour les librairies de jeu ainsi que leur interface.
+
+### Fonctions externalisées
+
+L'architecture prévoie deux fonctions à externaliser pour être utiliser dans le "core".
+
+```cpp
+IGameModule *entryPoint();
+Signature getSignature();
+```
+
+- La fonction `entryPoint` renvoie une instance de la classe dérivée de `IGameModule`.
+- La fonction `getSignature` renvoie une `Signature` qui permet d'identifier la lib comme conforme à une librairie de jeu du projet.
+
+Une `Signature` est définie de la manière suivante :
+
+```cpp
+enum Signature {
+    GAME = 404,
+    GRAPHICAL = 808
+};
+```
+
+La fonction `getSignature` d'une librairie de jeu est sensée retourner `GAME`.
+
+### Description de l'interface
+
+Le boulot de la librairie de jeu c'est de faire fonctionner le jeu.
+
+#### Préparer les assets du jeu
+
+Avant d'utiliser un jeu, il faut créer ses entitées et récupérer les informations graphiques à transmettre à la librairie graphique. Pour cela il y a trois méthodes distinctes dans l'interface.
+
+```cpp
+virtual std::vector<std::reference_wrapper<IEntity>> initEntities() = 0;
+virtual std::map<EntityType, std::string> getSpriteDict() = 0;
+virtual Map getMap() = 0;
+```
+
+- La méthode `initEntities` créée toutes les entitées sous forme d'`IEntity`. La méthode renvoie un `std::vector` de `std::reference_wrapper` d'`IEntity` afin de pouvoir manipuler les entités et les transmettres. Une `IEntity` est définie dans [Type.hhp](Type.hpp).
+
+```cpp
+class IEntity {
+    private:
+        EntityType entityType;
+        Vector2D position;
+        bool visibility;
+
+    public:
+        virtual ~IEntity() = 0;
+        virtual EntityType getEntityType() = 0;
+        virtual void setEntityType(EntityType) = 0;
+        virtual Vector2D getPosition() = 0;
+        virtual void setPosition(Vector2D position) = 0;
+        virtual bool getVisibility() = 0;
+        virtual void setVisibility(bool visibility) = 0;
+};
+```
+
+Les noms des variables sont équivoques. Précisons tout de même que `Vector2D` représente une position dans un espace à deux dimension définie de la manière suivante :
+
+```cpp
+struct Vector2D {
+    int x;
+    int y;
+};
+```
+
+En sachant que les opérateurs "+", "+=", "-" et "-=" sont surchargés pour `Vector2D`.
+
+- La méthode `getSpriteDict` permet de récupérer une `std::map` d'`EntityType` et de `std::string`. L'`EntityType` est définie dans [Type.hhp](Type.hpp).
+
+Pour chaque `EntityType`, la `std::string` correspondante représente le chemin vers le sprite à utiliser pour afficher l'entité.
+
+- La méthode `getMap` permet de récupérer la carte du jeu sous la forme d'une `Map`. Une `Map` est un alias défini dans [Type.hhp](Type.hpp).
+
+```cpp
+using Map = std::vector<std::vector<EntityType>>;
+```
+
+#### Fonctionnement du jeu
+
+Il y a deux fonctions pour gérer le fonctionnement du jeu.
+
+```cpp
+virtual void handleInput(std::size_t deltaTime, Input input, const std::vector<std::reference_wrapper<IEntity>>& entities) = 0;
+virtual void update(std::size_t deltaTime, const std::vector<std::reference_wrapper<IEntity>>& entities) = 0;
+```
+
+- La méthode `handleInput` permet de gérer les actions de l'utilisateur. La méthode prend en argument le timestamp de la clock du "core" en `std::size_t`, une action en `Input` et la liste des entitées en `std::vector<std::reference_wrapper<IEntity>>`. Un `Input` est une `enum` qui indique le type d'évènement reçu.
+
+```cpp
+enum Input {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    QUIT,
+    MENU,
+    ACTION
+};
+```
+
+- La méthode `update` permet de mettre à jour la progression du jeu en fonction des actions précédemments gérées par `handleInput` et de l'évolution dans le temps. La méthode prend en argument le timestamp de la clock du "core" en `std::size_t` et la liste des entitées en `std::vector<std::reference_wrapper<IEntity>>`.
+
+#### Transmission d'information au core
+
+Un jeu a plein d'informations à transmettre au "core" afin d'assurer son bon fonctionnement. Toutes ces informations sont transmises sous forme d'instructions avec la méthode `getInstruction`.
+
+```cpp
+virtual std::vector<std::string> getInstruction() = 0;
+```
+
+Chaque entrée du `std::vector` contient une instruction en `std::string` sous la forme d'une commande à parser pour le "core".
+
+**Format d'instruction prévu par l'architecture**
+
+Format:
+
+```
+command <arg1> <arg2> <...>
+```
+
+- `command`: nom de l'instruction
+- `<argN>`: si nécessaire, argument à passer à l'instruction
+
+**Liste d'instructions prévues par l'architecture**
+
+- `loadLibrary <libraryPath> <librarySignature>`
+- `displayText <text> <x> <y> <highlight>`
+
+### Usage prévu de l'interface de librairie de jeu
+
+Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librairie de jeu dans le "core".
+
 ```mermaid
   graph TD;
     A[loaging a game lib] --> B[getSpriteDict]
-    B --> C[initEntities];
-    C --> D[getMap];
+    B --> C[getMap];
+    C --> D[initEntities];
     D --> E[core main loop];
-    E --> F[clear display];
-    F --> G[display lib get event];
+    E --> F[display lib get event];
+    F --> G[clear display];
     G --> H[handleInput];
     H --> I[update];
     I --> J[getInstruction];
     J --> K[displaying];
-    K --> E;
+    K --> L[clock management];
+    L --> E;
 ```
 
 ## 4 - Théorie complémentaire vis-à-vis du fonctionnement
 
+```mermaid
+  graph TD;
+    A[loading graphical and game lib] --> B[IGameModule::getSpriteDict]
+    B --> C[IGameModule::getMap];
+    C --> D[IDisplayModule::loadDicts];
+    D --> E[IGameModule::initEntities];
+    E --> F[core main loop];
+    F --> G[IGameModule::event];
+    G --> H[IDisplayModule::clear];
+    H --> I[IGameModule::handleInput];
+    I --> J[IGameModule::update];
+    J --> K[IGameModule::getInstruction];
+    K --> L[IDisplayModule::updateMap];
+    L --> M[IDisplayModule::updateEntity];
+    M --> N[IDisplayModule::updateText];
+    K --> O[IDisplayModule::staticScreen];
+    N --> P[IDisplayModule::display];
+    P --> Q[clock management];
+    Q --> F;
+
+```
+
 ## 5 - Kiwi is love, kiwi is life
+
+Kiwi, dans sa grande mansuétude, nous fourni une amélioration de la logique booléenne avec le `KiwiBool`.
+
+Tout ce qui est `Kiwi` est dans le vrai. Ce qui est `NotKiwi` est forcément dans l'erreur.
+
+Ce qui donne :
+
+```cpp
+enum KiwiBool {
+    NotKiwi = false,
+    Kiwi = true
+};
+```
 
 Merci d'avoir lue cette documentation jusqu'au bout. Kiwi est fier de vous.
 
-<div style="text-align: center;">
+<center>
     <img src="kiwi-dance.gif"/>
-</div>
+</center>
