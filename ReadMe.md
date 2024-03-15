@@ -1,11 +1,17 @@
 # Interfaces pour le projet Arcade
 
 **Table des matières**
-- 1 - Comment l'utiliser sur votre propre repository ?
-- 2 - Interface de pour librairie graphique
-- 3 - Interface de pour librairie de jeu
-- 4 - Théorie complémentaire vis-à-vis du fonctionnement
-- 5 - Kiwi is love, kiwi is life
+- 1 - [Comment l'utiliser sur votre propre repository ?](#1---comment-lutiliser-sur-votre-propre-repository-)
+  - [Importer ArcadeInterface en tant que sous-module](#importer-arcadeinterface-en-tant-que-sous-module)
+    - [Créer le sous-module](#créer-le-sous-module)
+    - [Comment corriger l'adresse de mon sous-module ?](#comment-corriger-ladresse-de-mon-sous-module-)
+    - [Importer les fichiers du sous-module](#importer-les-fichiers-du-sous-module)
+  - [Mettez à jour régulièrement le sous-module](#mettez-à-jour-régulièrement-le-sous-module)
+  - [Modifier le sous-module que vous avez importer dans votre repository](#modifier-le-sous-module-que-vous-avez-importer-dans-votre-repository)
+- 2 - [Interface de pour librairie graphique](#2---interface-pour-librairie-graphique)
+- 3 - [Interface de pour librairie de jeu](#3---interface-de-pour-librairie-de-jeu)
+- 4 - [Théorie complémentaire vis-à-vis du fonctionnement](#4---théorie-complémentaire-vis-à-vis-du-fonctionnement)
+- 5 - [Kiwi is love, kiwi is life](#5---kiwi-is-love-kiwi-is-life)
 
 ## 1 - Comment l'utiliser sur votre propre repository ?
 
