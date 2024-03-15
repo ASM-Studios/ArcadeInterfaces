@@ -17,4 +17,5 @@ class IGameModule {
         virtual Map getMap() = 0; //Map being a IGameModule attribute
         virtual std::vector<std::reference_wrapper<IEntity>> initEntities() = 0;
         virtual std::map<EntityType, std::string> getSpriteDict() = 0;
+        virtual std::map<StaticScreen, std::string> getStaticScreen() = 0;
 };
