@@ -488,6 +488,8 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
     O --> P
     P --> Q[clock management];
     Q --> F;
+    B --transmit as argument--> D;
+    C --transmit as argument--> D;
 
 ```
 
