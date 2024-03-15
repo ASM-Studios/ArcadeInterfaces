@@ -328,7 +328,7 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
     H --> I[update];
     I --> J[getInstruction];
     J --> K[displaying];
-    K --> C;
+    K --> E;
 
 ```
 
