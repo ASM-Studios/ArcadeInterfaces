@@ -485,6 +485,7 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
     M --> N[IDisplayModule::updateText];
     K --> O[IDisplayModule::staticScreen];
     N --> P[IDisplayModule::display];
+    O --> P
     P --> Q[clock management];
     Q --> F;
 
