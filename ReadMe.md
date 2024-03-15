@@ -299,7 +299,7 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
 ```mermaid
   graph TD;
     A[loaging a graphical lib] --> B[loadDicts]
-    B --> C{core main loop};
+    B --> C|core main loop|;
     C --> D[event];
     D --> E[clear];
     E --> F[handling game functionnement];
@@ -455,7 +455,7 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
     A[loaging a game lib] --> B[getSpriteDict]
     B --> C[getMap];
     C --> D[initEntities];
-    D --> E{core main loop};
+    D --> E|core main loop|;
     E --> F[display lib get event];
     F --> G[clear display];
     G --> H[handleInput];
@@ -476,7 +476,7 @@ Voici un schéma représentant le fonctionnement complet du core tel que prévu 
     B --> C[IGameModule::getMap];
     C --> D[IDisplayModule::loadDicts];
     D --> E[IGameModule::initEntities];
-    E --> F{core main loop};
+    E --> F|core main loop|;
     F --> G[IGameModule::event];
     G --> H[IDisplayModule::clear];
     H --> I[IGameModule::handleInput];
