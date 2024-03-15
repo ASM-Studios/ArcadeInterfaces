@@ -311,7 +311,6 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
     J --> K;
     K --> L[clock management];
     L --> C;
-
 ```
 
 ## 3 - Interface pour librairie de jeu
@@ -329,7 +328,6 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
     I --> J[getInstruction];
     J --> K[displaying];
     K --> E;
-
 ```
 
 ## 4 - Théorie complémentaire vis-à-vis du fonctionnement
