@@ -298,7 +298,7 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
 
 ```mermaid
   graph TD;
-    A[loaging a graphical lib] --> B[loadSpriteDict]
+    A[loaging a graphical lib] --> B[loadDicts]
     B --> C[core main loop];
     C --> D[clear];
     D --> E[event];
@@ -306,14 +306,31 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
     F --> G[updateMap];
     G --> H[updateEntity];
     H --> I[updateText];
-    C --> J[staticScreen];
+    F --> J[staticScreen];
     I --> K[display];
     J --> K;
-    K --> C;
+    K --> L[clock management];
+    L --> C;
 
 ```
 
 ## 3 - Interface pour librairie de jeu
+
+```mermaid
+  graph TD;
+    A[loaging a game lib] --> B[getSpriteDict]
+    B --> C[initEntities];
+    C --> D[getMap];
+    D --> E[core main loop];
+    E --> F[clear display];
+    F --> G[display lib get event];
+    G --> H[handleInput];
+    H --> I[update];
+    I --> J[getInstruction];
+    J --> K[displaying];
+    K --> C;
+
+```
 
 ## 4 - Théorie complémentaire vis-à-vis du fonctionnement
 
