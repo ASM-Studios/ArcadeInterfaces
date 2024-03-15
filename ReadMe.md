@@ -468,6 +468,8 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
 
 ## 4 - Théorie complémentaire vis-à-vis du fonctionnement
 
+Voici un schéma représentant le fonctionnement complet du core tel que prévu par l'architecture.
+
 ```mermaid
   graph TD;
     A[loading graphical and game lib] --> B[IGameModule::getSpriteDict]
@@ -507,6 +509,6 @@ enum KiwiBool {
 
 Merci d'avoir lue cette documentation jusqu'au bout. Kiwi est fier de vous.
 
-<center>
+<div>
     <img src="kiwi-dance.gif"/>
-</center>
+</div>
