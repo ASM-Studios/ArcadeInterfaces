@@ -41,8 +41,8 @@ Votre branche est à jour avec 'origin/main'.
 
 Modifications qui seront validées :
   (utilisez "git restore --staged <fichier>..." pour désindexer)
-	nouveau fichier : .gitmodules
-	nouveau fichier : ArcadeInterfaces
+	nouveau fichier : .gitmodules
+	nouveau fichier : ArcadeInterfaces
 
 ```
 
@@ -179,25 +179,19 @@ Le boulot de la librairie graphique c'est d'afficher le jeu à l'écran.
 Pour initier une librairie il faut d'abord lui transmettre la liste des sprites à afficher. Pour cela il faut utiliser la méthode suivante :
 
 ```cpp
-loadSpriteDict(const std::map<EntityType, std::string>& spriteDict) = 0;
+virtual void loadDicts(
+    const std::map<EntityType, std::string>& spriteDict,
+    const std::map<StaticScreen, std::string>& splashDict) = 0;
 ```
 
-La fonction prend en argument une `std::map` d'`EntityType` et de `std::string`. L'`EntityType` est définie dans `Type.hhp`.
+La fonction prend en argument:
 
-```cpp
-enum EntityType {
-    UNDEFINED = -1,
-    WALL = 0,
-    PLAYER = 1,
-    ENEMY = 2,
-    ITEM1 = 3,
-    ITEM2 = 4,
-    ITEM3 = 5,
-    ITEM4 = 6
-};
-```
+- `std::map` d'`EntityType` et de `std::string`. L'`EntityType` est définie dans [Type.hhp](Type.hpp).
 
 Ainsi il y a une entrée dans la `std::map` pour chaque valeur de `EntityType`. La `std::string` correspond au chemin vers le sprite correspondant au `EntityType`.
+
+- `std::map` de `StaticScreen` et de `std::string`. `StaticScreen` est une `enum` définie dans [Type.hpp](Type.hpp).
+
 
 #### Transmettre l'information à afficher
 
@@ -209,7 +203,7 @@ virtual void updateMap(Map &map) = 0;
 virtual void updateText(const std::string& text, Vector2D pos, bool highlight) = 0;
 ```
 
-- La méthode `updateEntity` permet d'afficher sprite sous la forme d'une `IEntity`. `IEntity` est une classe définie dans `Type.hpp` qui contient le type et la position d'un sprite à afficher.
+- La méthode `updateEntity` permet d'afficher sprite sous la forme d'une `IEntity`. `IEntity` est une classe définie dans [Type.hhp](Type.hpp) qui contient le type et la position d'un sprite à afficher.
 
 ```cpp
 class IEntity {
@@ -240,7 +234,7 @@ struct Vector2D {
 
 En sachant que les opérateurs "+", "+=", "-" et "-=" sont surchargés pour `Vector2D`.
 
-- La méthode `updateMap` permet d'afficher un tableau d'entité. Elle prend en argument une `Map`. Une `Map` est un alias défini dans `Type.hpp`.
+- La méthode `updateMap` permet d'afficher un tableau d'entité. Elle prend en argument une `Map`. Une `Map` est un alias défini dans [Type.hhp](Type.hpp).
 
 ```cpp
 using Map = std::vector<std::vector<EntityType>>;
@@ -254,7 +248,7 @@ L'interface possède aussi une méthode `staticScreen` pour afficher un écran f
 virtual void staticScreen(StaticScreen screen) = 0;
 ```
 
-La méthode prend en argument un `StaticScreen` qui est une `enum` qui permet de choisir le type d'écran à afficher. `StaticScreen` est défini dans `Type.hpp`.
+La méthode prend en argument un `StaticScreen` qui est une `enum` qui permet de choisir le type d'écran à afficher. `StaticScreen` est défini dans [Type.hhp](Type.hpp).
 
 ```cpp
 enum StaticScreen {
@@ -327,6 +321,6 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
 
 Merci d'avoir lue cette documentation jusqu'au bout. Kiwi est fier de vous.
 
-<center>
+<div style="text-align: center;">
     <img src="kiwi-dance.gif"/>
-</center>
+</div>

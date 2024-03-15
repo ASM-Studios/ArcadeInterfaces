@@ -2,6 +2,9 @@
 
 #include "Type.hpp"
 
+//const std::map<EntityType, std::string>& spriteDict spriteDict[EntityType] = "path/to/sprite"
+//const std::map<StaticScreen, std::string>& splashDict splashDict[StaticScreen] = "path/to/splash"
+
 class IDisplayModule {
     public:
         virtual ~IDisplayModule() = default;
@@ -18,5 +21,7 @@ class IDisplayModule {
 
         //Display a specific non gameplay screen (splash, game over...)
         virtual void staticScreen(StaticScreen screen) = 0;
-        virtual void loadSpriteDict(const std::map<EntityType, std::string>& spriteDict) = 0;
+        virtual void loadDicts(
+            const std::map<EntityType, std::string>& spriteDict,
+            const std::map<StaticScreen, std::string>& splashDict) = 0;
 };
