@@ -83,7 +83,7 @@ enum Signature {
 };
 
 class IEntity {
-    private:
+    protected:
         EntityType entityType;
         Vector2D position;
         bool visibility;
