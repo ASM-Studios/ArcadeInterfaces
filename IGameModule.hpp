@@ -3,6 +3,11 @@
 #include "Type.hpp"
 
 class IGameModule {
+    protected:
+        Map map;
+        std::vector<std::reference_wrapper<IEntity>> entities;
+        EntityDescription entityDescriptor;
+
     public:
         virtual ~IGameModule() = default;
 
@@ -12,10 +17,11 @@ class IGameModule {
 
         //return an instruction sent from the game to the core, see the documentation for more details
         virtual std::vector<std::string> getInstruction() = 0;
+        // return a list of entities to display.
+        virtual EntityDescription getEntities() = 0;
 
         //init function to call on game start
-        virtual Map getMap() = 0; //Map being a IGameModule attribute
-        virtual std::vector<std::reference_wrapper<IEntity>> initEntities() = 0;
+        virtual Map getMap() = 0;
         virtual std::map<EntityType, std::string> getSpriteDict() = 0;
         virtual std::map<StaticScreen, std::string> getStaticScreen() = 0;
 };

@@ -8,8 +8,8 @@
     - [Importer les fichiers du sous-module](#importer-les-fichiers-du-sous-module)
   - [Mettez à jour régulièrement le sous-module](#mettez-à-jour-régulièrement-le-sous-module)
   - [Modifier le sous-module que vous avez importé dans votre repository](#modifier-le-sous-module-que-vous-avez-importé-dans-votre-repository)
-- 2 - [Interface de pour librairie graphique](#2---interface-pour-librairie-graphique)
-- 3 - [Interface de pour librairie de jeu](#3---interface-de-pour-librairie-de-jeu)
+- 2 - [Interface pour librairie graphique](#2---interface-pour-librairie-graphique)
+- 3 - [Interface pour librairie de jeu](#3---interface-de-pour-librairie-de-jeu)
 - 4 - [Théorie complémentaire vis-à-vis du fonctionnement](#4---théorie-complémentaire-vis-à-vis-du-fonctionnement)
 - 5 - [Kiwi is love, kiwi is life](#5---kiwi-is-love-kiwi-is-life)
 
@@ -349,7 +349,6 @@ Le boulot de la librairie de jeu c'est de faire fonctionner le jeu.
 Avant d'utiliser un jeu, il faut créer ses entitées et récupérer les informations graphiques à transmettre à la librairie graphique. Pour cela il y a trois méthodes distinctes dans l'interface.
 
 ```cpp
-virtual std::vector<std::reference_wrapper<IEntity>> initEntities() = 0;
 virtual std::map<EntityType, std::string> getSpriteDict() = 0;
 virtual Map getMap() = 0;
 ```
