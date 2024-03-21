@@ -16,7 +16,7 @@ class IDisplayModule {
 
         //update must be followed by a display()
         virtual void updateText(const std::string& text, Vector2D pos, bool highlight) = 0;
-        virtual void updateEntity(IEntity &entity) = 0;
+        virtual void updateEntity(EntityDescription entities) = 0;
         virtual void updateMap(Map &map) = 0;
 
         //Display a specific non gameplay screen (splash, game over...)

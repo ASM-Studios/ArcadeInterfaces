@@ -12,8 +12,8 @@ class IGameModule {
         virtual ~IGameModule() = default;
 
         //delta since the start of the game
-        virtual void handleInput(std::size_t deltaTime, Input input, const std::vector<std::reference_wrapper<IEntity>>& entities) = 0;
-        virtual void update(std::size_t deltaTime, const std::vector<std::reference_wrapper<IEntity>>& entities) = 0;
+        virtual void handleInput(std::size_t deltaTime, Input input) = 0;
+        virtual void update(std::size_t deltaTime) = 0;
 
         //return an instruction sent from the game to the core, see the documentation for more details
         virtual std::vector<std::string> getInstruction() = 0;
