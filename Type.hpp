@@ -68,7 +68,7 @@ enum EntityType {
 
 using Map = std::vector<std::vector<EntityType>>;
 
-using EntityDescription = std::vector<std::pair<EntityType, Vector2D>>;
+using EntitiesDescription = std::vector<std::pair<EntityType, Vector2D>>;
 
 enum Input {
     UP,
