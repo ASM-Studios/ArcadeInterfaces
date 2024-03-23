@@ -93,11 +93,11 @@ class IEntity {
 
     public:
         virtual ~IEntity() = 0;
-        virtual EntityType getEntityType() = 0;
+        virtual EntityType getEntityType() const = 0;
         virtual void setEntityType(EntityType) = 0;
-        virtual Vector2D getPosition() = 0;
+        virtual Vector2D getPosition() const = 0;
         virtual void setPosition(Vector2D position) = 0;
-        virtual bool getVisibility() = 0;
+        virtual bool getVisibility() const = 0;
         virtual void setVisibility(bool visibility) = 0;
 };
 
