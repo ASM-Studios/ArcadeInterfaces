@@ -9,7 +9,7 @@
   - [Mettez à jour régulièrement le sous-module](#mettez-à-jour-régulièrement-le-sous-module)
   - [Modifier le sous-module que vous avez importé dans votre repository](#modifier-le-sous-module-que-vous-avez-importé-dans-votre-repository)
 - 2 - [Interface pour librairie graphique](#2---interface-pour-librairie-graphique)
-- 3 - [Interface pour librairie de jeu](#3---interface-de-pour-librairie-de-jeu)
+- 3 - [Interface pour librairie de jeu](#3---interface-pour-librairie-de-jeu)
 - 4 - [Théorie complémentaire vis-à-vis du fonctionnement](#4---théorie-complémentaire-vis-à-vis-du-fonctionnement)
 - 5 - [Kiwi is love, kiwi is life](#5---kiwi-is-love-kiwi-is-life)
 
@@ -71,13 +71,13 @@ Ce que vous voyez est la déclaration du sous-module ArcadeInterfaces.
 - La variable `path` correspond au chemin jusqu'au dossier qui contient le sous-module à partir de la racine de votre repository. Vous pouvez donc déplacer et renommer le dossier ArcadeInterfaces du moment que vous mettez à jour le `path` du `.gitmodules`.
 - La variable `url` correspond à l'url utilisée pour cloner le repository du sous-module. Pour importer notre sous-module vous devez mettre `git@github.com:ASM-Studios/ArcadeInterfaces.git` comme url.
 
-Une fois que vous avez effectué vos modifications sur `.gitmodules` vous devez synchroniser vos sous-modules sur la nouvelle configurations. Pour cela utilisez la commande suivante :
+Une fois que vous avez effectué vos modifications sur `.gitmodules` vous devez synchroniser vos sous-modules sur la nouvelle configuration. Pour cela utilisez la commande suivante :
 
 ```
 git submodule sync --recursive
 ```
 
-Normalement à ce stade là votre sous-module est près pour continuer le tutoriel.
+Normalement à ce stade-là, votre sous-module est prêt pour continuer le tutoriel.
 
 #### Importer les fichiers du sous-module
 
@@ -88,7 +88,7 @@ Pour importer les fichiers vous devez initialiser le sous-module avec la command
 git submodule init ./ArcadeInterfaces/
 ```
 
-Normalement à ce stade là le dossier du sous-module ressemble à ce qu'aurait donné un "git clone" de son repository.
+Normalement à ce stade là le dossier du sous-module ressemble à ce qu'aurait donné un "git clone" de ce repository.
 
 ### Mettez à jour régulièrement le sous-module
 
@@ -141,7 +141,7 @@ git commit -m "description du commit"
 git push
 ```
 
-Une fois que vous avez effectué votre commit dans ArcadeInterfaces, revenez à la racine de votre repository est faites un commit pour sauvegarder ces modification sur votre projet aussi.
+Une fois que vous avez effectué votre commit dans ArcadeInterfaces, revenez à la racine de votre repository et faites un commit pour sauvegarder ces modification sur votre projet aussi.
 
 ## 2 - Interface pour librairie graphique
 
@@ -152,8 +152,10 @@ Cette section explique le fonctionnement commun prévu pour les librairies graph
 L'architecture prévoie deux fonctions à externaliser pour être utiliser dans le "core".
 
 ```cpp
-IDisplayModule *entryPoint();
-Signature getSignature();
+extern "C" {
+    IDisplayModule *entryPoint();
+    Signature getSignature();
+}
 ```
 
 - La fonction `entryPoint` renvoie une instance de la classe dérivée de `IDisplayModule`.
@@ -169,6 +171,10 @@ enum Signature {
 ```
 
 La fonction `getSignature` d'une librairie graphique est sensée retourner `GRAPHICAL`.
+
+Le `extern "C"` indique à l'éditeur de liens (linker) de préserver le nom de ces fonctions. En effet, le C++ supporte la surcharge de fonctions (même nom de fonction avec différents types de paramètre / retour), et utilise un mécanisme appelé `name mangling` qui va modifier le nom des fonctions, et ce même si elles ne sont pas surchargées (ainsi avec GCC, `float f(float)` devient `_Z1ff`).
+La bibliothèque dlopen ne supportant pas ceci, si l'on se passe de `extern "C"`,
+on devra lui demander d'ouvrir `_Z1ff` au lien de `f` (si l'on reprend l'exemple ci-dessus), d'où son utilité pour nous simplifier la tâche.
 
 ### Description de l'interface
 
@@ -186,7 +192,7 @@ virtual void loadDicts(
 
 La fonction prend en argument:
 
-- `std::map` d'`EntityType` et de `std::string`. L'`EntityType` est définie dans [Type.hhp](Type.hpp).
+- `std::map` d'`EntityType` et de `std::string`. L'`EntityType` est définie dans [Type.hpp](Type.hpp).
 
 Ainsi il y a une entrée dans la `std::map` pour chaque valeur de `EntityType`. La `std::string` correspond au chemin vers le sprite correspondant au `EntityType`.
 
@@ -198,12 +204,12 @@ Ainsi il y a une entrée dans la `std::map` pour chaque valeur de `EntityType`. 
 L'interface dispose de trois méthodes pour transmettre les informations à afficher.
 
 ```cpp
-virtual void updateEntity(IEntity &entity) = 0;
+virtual void updateEntities(const EntitiesDescription& entities) = 0;
 virtual void updateMap(Map &map) = 0;
 virtual void updateText(const std::string& text, Vector2D pos, bool highlight) = 0;
 ```
 
-- La méthode `updateEntity` permet d'afficher sprite sous la forme d'une `IEntity`. `IEntity` est une classe définie dans [Type.hhp](Type.hpp) qui contient le type et la position d'un sprite à afficher.
+- La méthode `updateEntities` permet d'afficher plusieurs sprites à partir de leur type et de leur position à l'écran (`EntitiesDescription` est un alias de `std::vector<std::pair<EntityType, Vector2D>>`, voir [Type.hpp](Type.hpp)). Vector2D sera détaillé plus bas.
 
 ```cpp
 class IEntity {
@@ -234,7 +240,7 @@ struct Vector2D {
 
 En sachant que les opérateurs "+", "+=", "-" et "-=" sont surchargés pour `Vector2D`.
 
-- La méthode `updateMap` permet d'afficher un tableau d'entité. Elle prend en argument une `Map`. Une `Map` est un alias défini dans [Type.hhp](Type.hpp).
+- La méthode `updateMap` permet d'afficher un tableau d'entités. Elle prend en argument une `Map`. Une `Map` est un alias défini dans [Type.hpp](Type.hpp).
 
 ```cpp
 using Map = std::vector<std::vector<EntityType>>;
@@ -248,7 +254,7 @@ L'interface possède aussi une méthode `staticScreen` pour afficher un écran f
 virtual void staticScreen(StaticScreen screen) = 0;
 ```
 
-La méthode prend en argument un `StaticScreen` qui est une `enum` qui permet de choisir le type d'écran à afficher. `StaticScreen` est défini dans [Type.hhp](Type.hpp).
+La méthode prend en argument un `StaticScreen` qui est une `enum` qui permet de choisir le type d'écran à afficher. `StaticScreen` est défini dans [Type.hpp](Type.hpp).
 
 ```cpp
 enum StaticScreen {
@@ -298,11 +304,11 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
 
 ```mermaid
   graph TD;
-    A[loaging a graphical lib] --> B[loadDicts]
+    A[loading a graphical lib] --> B[loadDicts]
     B --> C{core main loop};
     C --> D[event];
     D --> E[clear];
-    E --> F[handling game functionnement];
+    E --> F[handling game functioning];
     F --> G[updateMap];
     G --> H[updateEntity];
     H --> I[updateText];
@@ -322,8 +328,10 @@ Cette section explique le fonctionnement commun prévu pour les librairies de je
 L'architecture prévoie deux fonctions à externaliser pour être utiliser dans le "core".
 
 ```cpp
-IGameModule *entryPoint();
-Signature getSignature();
+extern "C" {
+    IGameModule *entryPoint();
+    Signature getSignature();
+}
 ```
 
 - La fonction `entryPoint` renvoie une instance de la classe dérivée de `IGameModule`.
@@ -340,24 +348,26 @@ enum Signature {
 
 La fonction `getSignature` d'une librairie de jeu est sensée retourner `GAME`.
 
+`extern "C"` est expliqué plus haut, dans la section détaillant les bibliothèques graphiques.
+
 ### Description de l'interface
 
 Le boulot de la librairie de jeu c'est de faire fonctionner le jeu.
 
 #### Préparer les assets du jeu
 
-Avant d'utiliser un jeu, il faut créer ses entitées et récupérer les informations graphiques à transmettre à la librairie graphique. Pour cela il y a trois méthodes distinctes dans l'interface.
+Avant d'utiliser un jeu, il faut créer ses entités et récupérer les informations graphiques à transmettre à la librairie graphique. Pour cela il y a trois méthodes distinctes dans l'interface.
 
 ```cpp
 virtual std::map<EntityType, std::string> getSpriteDict() = 0;
 virtual Map getMap() = 0;
 ```
 
-- La méthode `initEntities` créée toutes les entitées sous forme d'`IEntity`. La méthode renvoie un `std::vector` de `std::reference_wrapper` d'`IEntity` afin de pouvoir manipuler les entités et les transmettres. Une `IEntity` est définie dans [Type.hhp](Type.hpp).
+- La méthode `initEntities` créée toutes les entitées sous forme d'`IEntity`. La méthode renvoie un `std::vector` de `std::reference_wrapper` d'`IEntity` afin de pouvoir manipuler les entités et les transmettres. Une classe `IEntity` est définie dans [Type.hpp](Type.hpp).
 
 ```cpp
 class IEntity {
-    private:
+    protected:
         EntityType entityType;
         Vector2D position;
         bool visibility;
@@ -384,11 +394,11 @@ struct Vector2D {
 
 En sachant que les opérateurs "+", "+=", "-" et "-=" sont surchargés pour `Vector2D`.
 
-- La méthode `getSpriteDict` permet de récupérer une `std::map` d'`EntityType` et de `std::string`. L'`EntityType` est définie dans [Type.hhp](Type.hpp).
+- La méthode `getSpriteDict` permet de récupérer une `std::map` d'`EntityType` et de `std::string`. L'`EntityType` est définie dans [Type.hpp](Type.hpp).
 
 Pour chaque `EntityType`, la `std::string` correspondante représente le chemin vers le sprite à utiliser pour afficher l'entité.
 
-- La méthode `getMap` permet de récupérer la carte du jeu sous la forme d'une `Map`. Une `Map` est un alias défini dans [Type.hhp](Type.hpp).
+- La méthode `getMap` permet de récupérer la carte du jeu sous la forme d'une `Map`. Une `Map` est un alias défini dans [Type.hpp](Type.hpp).
 
 ```cpp
 using Map = std::vector<std::vector<EntityType>>;
@@ -451,7 +461,7 @@ Le schéma ci-dessous représente l'algorithme prévu pour l'usage de la librair
 
 ```mermaid
   graph TD;
-    A[loaging a game lib] --> B[getSpriteDict]
+    A[loading a game lib] --> B[getSpriteDict]
     B --> C[getMap];
     C --> D[initEntities];
     D --> E{core main loop};
