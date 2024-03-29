@@ -22,6 +22,6 @@ class IDisplayModule {
         //Display a specific non gameplay screen (splash, game over...)
         virtual void staticScreen(StaticScreen screen) = 0;
         virtual void loadDicts(
-            const std::map<EntityType, std::string>& spriteDict,
-            const std::map<StaticScreen, std::string>& splashDict) = 0;
+                const std::map<EntityType, std::pair<std::string, std::size_t>>& spriteDict,
+                const std::map<StaticScreen, std::string>& splashDict) = 0;
 };
