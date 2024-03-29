@@ -21,7 +21,7 @@ class IGameModule {
         virtual EntitiesDescription getEntities() = 0;
 
         //init function to call on game start
-        virtual Map getMap() = 0;
+        virtual Map& getMap() = 0;
         virtual std::map<EntityType, std::pair<std::string, std::size_t>> getSpriteDict() = 0;
         virtual std::map<StaticScreen, std::string> getStaticScreen() = 0;
 };
