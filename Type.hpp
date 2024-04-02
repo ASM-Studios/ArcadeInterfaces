@@ -29,16 +29,31 @@ struct SelectedLib {
     std::string game;
 };
 
+enum Input {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    QUIT,
+    MENU,
+    ACTION
+};
+
 struct Vector2D {
     int x;
     int y;
+    Input rotation;
+
+    Vector2D() = default;
+    Vector2D(int X, int Y) : x(X), y(Y), rotation(RIGHT) {}
+    Vector2D(int X, int Y, Input R) : x(X), y(Y), rotation(R) {}
 
     Vector2D operator+(Vector2D other) const {
-        return {x + other.x, y + other.y};
+        return {x + other.x, y + other.y, rotation};
     }
 
     Vector2D operator-(Vector2D other) const {
-        return {x - other.x, y - other.y};
+        return {x - other.x, y - other.y, rotation};
     }
 
     Vector2D& operator+=(Vector2D other) {
@@ -51,6 +66,14 @@ struct Vector2D {
         x -= other.x;
         y -= other.y;
         return *this;
+    }
+
+    bool operator==(Vector2D other) {
+        return x == other.x && y == other.y && rotation == other.rotation;
+    }
+
+    bool operator!=(Vector2D other) {
+        return x != other.x || y != other.y || rotation != other.rotation;
     }
 };
 
@@ -97,16 +120,6 @@ enum EntityType {
 using Map = std::vector<std::vector<EntityType>>;
 
 using EntitiesDescription = std::vector<std::pair<EntityType, Vector2D>>;
-
-enum Input {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    QUIT,
-    MENU,
-    ACTION
-};
 
 enum Signature {
     GAME = 404,
