@@ -27,3 +27,11 @@ loadLibrary <libraryPath> <librarySignature>
 
 - `<libraryPath>`: The path to the library to load.
 - `<librarySignature>`: The signature of the library to load. See [Type.hpp](Type.hpp) for more information.
+
+### `setScore`
+
+```
+setScore <n>
+```
+
+- `<n>`: New score
