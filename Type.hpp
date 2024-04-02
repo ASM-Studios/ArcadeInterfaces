@@ -120,7 +120,7 @@ class IEntity {
         bool visibility;
 
     public:
-        virtual ~IEntity() = 0;
+        virtual ~IEntity() = default;
         virtual EntityType getEntityType() const = 0;
         virtual void setEntityType(EntityType) = 0;
         virtual Vector2D getPosition() const = 0;
