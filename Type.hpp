@@ -45,8 +45,8 @@ struct Vector2D {
     Input rotation;
 
     Vector2D() = default;
-    Vector2D(int X, int Y) : x(X), y(Y), rotation(RIGHT) {}
-    Vector2D(int X, int Y, Input R) : x(X), y(Y), rotation(R) {}
+    Vector2D(float X, float Y) : x(X), y(Y), rotation(RIGHT) {}
+    Vector2D(float X, float Y, Input R) : x(X), y(Y), rotation(R) {}
 
     Vector2D operator+(Vector2D other) const {
         return {x + other.x, y + other.y, rotation};
