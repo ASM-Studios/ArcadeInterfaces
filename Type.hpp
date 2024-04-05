@@ -121,6 +121,19 @@ using Map = std::vector<std::vector<EntityType>>;
 
 using EntitiesDescription = std::vector<std::pair<EntityType, Vector2D>>;
 
+enum Input {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    QUIT,
+    MENU,
+    ACTION,
+    RESET,
+    NEXT_DI,
+    NEXT_GA
+};
+
 enum Signature {
     GAME = 404,
     GRAPHICAL = 808,
