@@ -85,6 +85,7 @@ enum EntityType {
     WALL,
     PLAYER,
     PLAYER_SEC,
+    PLAYER_THD,
     PLAYER_MOVE,
     PLAYER_DYING,
     ENEMY,
@@ -124,19 +125,6 @@ enum EntityType {
 using Map = std::vector<std::vector<EntityType>>;
 
 using EntitiesDescription = std::vector<std::pair<EntityType, Vector2D>>;
-
-enum Input {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    QUIT,
-    MENU,
-    ACTION,
-    RESET,
-    NEXT_DI,
-    NEXT_GA
-};
 
 enum Signature {
     GAME = 404,
