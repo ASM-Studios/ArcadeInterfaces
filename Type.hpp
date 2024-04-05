@@ -36,7 +36,10 @@ enum Input {
     RIGHT,
     QUIT,
     MENU,
-    ACTION
+    ACTION,
+    RESET,
+    NEXT_DI,
+    NEXT_GA
 };
 
 struct Vector2D {
