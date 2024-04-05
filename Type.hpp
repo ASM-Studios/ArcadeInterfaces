@@ -117,7 +117,8 @@ enum EntityType {
     ITEM7,
     ITEM8,
     ITEM9,
-    BULLET
+    BULLET,
+    ENTITY_MAX // leave that at the end
 };
 
 using Map = std::vector<std::vector<EntityType>>;
