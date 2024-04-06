@@ -35,3 +35,10 @@ setScore <n>
 ```
 
 - `<n>`: New score
+
+### `staticScreen <id>`
+
+```
+staticScreen <id>
+```
+- `<id>`: ID of the static screen
